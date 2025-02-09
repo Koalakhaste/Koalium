@@ -128,14 +128,23 @@
 
             <label for="burstTemperature">Burst Temperature:</label>
             <input type="number" id="burstTemperature" name="burstTemperature" step="1" min ="-270" value="25" >
-
+            <label for="qty">Quantity:</label>
+            <input type="number" id="qty" name="qty" step="1" min ="1" value="1" >
+            <input type="hidden" id="user-ip" name="user-ip" value="">
             <div class="button-container">
-                <button type="submit" formaction="./rupture_request_handler.php">Send</button>
-                <button type="submit" formaction="rupture_request_handler.php">OK</button>
-                <button type="submit" formaction="mto.koalium.ir/rupture">Save</button>
+                <button type="submit" formaction="./rupture_request_handler.php" onclick="getUserIP()">Thickness</button>
+                <button type="submit" onclick="getUserIP()" formaction="new_rupture_data_form.php">Save</button>
+                <button type="submit" onclick="getUserIP()" formaction="rupture_drw_handler.php">Raw Sheet</button>
             </div>
         </form>
     </div>
-    <script src="script.js"></script>
+    
+    <script>
+        <script>
+        function getUserIP() {
+            document.getElementById('user-ip').value = data.ip;
+        }
+        getUserIP();
+    </script>
 </body>
 </html>

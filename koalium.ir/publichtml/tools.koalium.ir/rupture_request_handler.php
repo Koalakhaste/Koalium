@@ -13,7 +13,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+foreach ($_POST as $key => $value) {
+    echo "$key: $value\n";
+}
 // Form data
 $type = $_POST['type'];
 $size = $_POST['size'];
@@ -46,7 +48,7 @@ SELECT *
 FROM tested
 WHERE size = $size
 AND type = '$type'
-ORDER BY ABS(bp - $burst_pressure) ASC
+ORDER BY ABS(rbp - $burst_pressure) ASC
 LIMIT 1";
 
 $result = $conn->query($sql_search);
@@ -56,10 +58,10 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     
     $closest_bp = $row["layer"];
-    $layersf =  $closest_bp ."_";
+    $layersf =  $closest_bp ."_   ".$row["rbp"]."  ".$row["bp"];
     function parseText($input) {
     // Split the text into rows
-        $rows = explode(';', $input);
+        $rows = explode('_', $input);
 
         // Initialize an empty array to hold the parsed data
         $parsedData = [];
@@ -67,25 +69,24 @@ if ($result->num_rows > 0) {
         // Loop through each row
         foreach ($rows as $row) {
         // Split the row into columns
-            $columns = explode('_', $row);
-            $mycol = [];
+            $columns = explode(':', $row);
+            
             if($rowcounter==0){
-                $mylayer = $_POST['mainLayer']."_".$columns[1];
+                $mylayer = $_POST['mainLayer'].":".$columns[1];
+                $parsedData[] = explode(':', $mylayer);
             }else if($rowcounter==1){
-                $mylayer = $_POST['subLayer']."_".$columns[1];
+                $mylayer = $_POST['subLayer'].":".$columns[1];
+                $parsedData[] = explode(':', $mylayer);
+            }else{
+                $parsedData[] = explode(':', $row);
             }
             
-            $mycol = explode('_', $mylayer);
+           // $mycol = explode(':', $mylayer);
             $rowcounter+=1;
             // Add the columns to the parsed data array
-            $parsedData[] = $mycol;
+            //$parsedData[] = $mycol;
         }
-        if ($rowcounter <3){
-            $mylayer = $_POST['sealLayer']."_.0.4";
-            $columns = explode('_', $mylayer);
-            // Add the columns to the parsed data array
-            $parsedData[] = $columns;
-        }
+        
 
         return $parsedData;
     }
@@ -126,14 +127,14 @@ if ($result->num_rows > 0) {
 
         // Example usage
         $inputText = "layer1;thickness1_layer2;thickness2_layer3;thickness3";
-        $parsedData = parseText($layersf );
+        $parsedData = parseText($closest_bp);
 
         // Display the parsed data as a table
         displayTable($parsedData);
 
 
 
-    echo "Found element with burst pressure: $closest_bp<br>";
+    echo "Found element with burst pressure: $layersf<br>";
     
 } else {
     echo "No matching elements found in tested.<br>";

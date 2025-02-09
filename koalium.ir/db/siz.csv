@@ -1,0 +1,8 @@
+﻿element,from,to,min,ratio,overcalc
+rupture,1,9,2,0,
+rupture,10,15,3,0,
+rupture,16,30,4,0,
+rupture,31,100,6,0,
+rupture,101,250,6,0.04,
+rupture,251,999,10,0.03,
+rupture,1000,100000,30,0.02,
