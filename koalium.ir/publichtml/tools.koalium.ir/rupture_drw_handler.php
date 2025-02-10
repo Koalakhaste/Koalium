@@ -14,7 +14,7 @@ $qty_i = (int)$_POST['qty'];
 $size_query = "SELECT * FROM element_raw_size WHERE element = 'rupture' AND type= '$type' AND size = '$size'" ;
 $result_s = $conn->query($size_query);
 $row_s = $result_s->fetch_assoc();
-$diameter=$row_s['di']*0.25;
+$diameter=$row_s['do']*0.25;
 //
 $size_query_q = "SELECT * FROM overtotest WHERE az <= $qty_i AND ta >= $qty_i " ;
 $result_q = $conn->query($size_query_q);
@@ -38,7 +38,7 @@ $htmlContent = "<!DOCTYPE html>
         body {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: left;
             margin: 20px;
             font-family: Arial, sans-serif;
         }
@@ -46,11 +46,12 @@ $htmlContent = "<!DOCTYPE html>
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         input[type='number'], select {
             padding: 8px;
             font-size: 14px;
+			
         }
         button {
             padding: 8px 12px;
@@ -61,6 +62,8 @@ $htmlContent = "<!DOCTYPE html>
             border: 2px solid #000;
             background-color: darkblue;
             margin: 2px;
+			width: 100%;
+            height: auto;
         }
         footer {
             margin-top: 20px;
@@ -68,21 +71,44 @@ $htmlContent = "<!DOCTYPE html>
             font-size: 12px;
             color: #555;
         }
+		/* Media query to rotate the canvas on mobile devices */
+        @media only screen and (max-width: 600px) {
+            canvas {
+				margin-top: 65px;
+                transform: rotate(90deg);
+                width: auto;
+                height: 100%;
+            }
+			form {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 50px;
+        }
+			button {
+				padding: 8px 12px;
+				font-size: 14px;
+				cursor: pointer;
+			}
+        }
     </style>
 </head>
 <body>
-    <form id='dynamic-form'>
-        <input type='number' id='size' name='size' min='0.5' max='10' step='0.5' value='2' hidden='true'>
-        <input type='number' id='qty' name='qty' value='10'  hidden='true'>
-        <input type='number' id='desqty' name='desqty' value='3'  hidden='true'>
-        <input type='number' id='testqty' name='testqty' value='4'  hidden='true'>
+    <form id='dynamic-form' >
+	    
+        <input type='number' id='size' name='size' min='0.5' max='10' step='0.5' value='2' hidden>
+		<label for='qty' align='right' font-style='14,bold' hidden>Qty:</label>
+        <input type='number' id='qty' name='qty' value='10'  size='5' hidden>
+        <input type='number' id='desqty' name='desqty' value='3'  hidden>
+        <input type='number' id='testqty' name='testqty' value='4'  hidden>
         <select id='stagger' name='stagger'  hidden='true'>
             <option value='inline'>Inline</option>
             <option value='triangle' selected >Triangle</option>
         </select>
+		<button type='button' onclick='laserView()'>Laser View</button>
         <button type='button' onclick='sendData()'>Send</button>
         <button type='button' onclick='clearCanvas()'>Clear View</button>
-        <button type='button' onclick='laserView()'>Laser View</button>
+        
     </form>
     <canvas id='canvas1' width='1000' height='500'></canvas>
     <canvas id='canvas2' width='1000' height='500' style='display: none;'></canvas>
