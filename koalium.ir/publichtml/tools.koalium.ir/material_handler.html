@@ -21,9 +21,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             fetchData('rupture_handler.php?table=type', 'type');
             fetchData('rupture_handler.php?table=element_raw_size', 'size');
-            fetchData('rupture_handler.php?table=materials&db=koaliumi_rupturium_db&username=koaliumi_editor&password=koala551364', 'name');
-            fetchData('rupture_handler.php?table=materials&db=koaliumi_rupturium_db', 'name');
-            fetchData('rupture_handler.php?table=materials&db=koaliumi_rupturium_db', 'name');
+            fetchData('rupture_handler.php?table=material&db=koaliumi_rupturium_db', 'main_material');
+            fetchData('rupture_handler.php?table=material&db=koaliumi_rupturium_db', 'vacuum_material');
+            fetchData('rupture_handler.php?table=material&db=koaliumi_rupturium_db', 'seal_material');
         });
     </script>
 </head>
@@ -37,9 +37,7 @@
         <select id="size" name="size"></select><br>
 
         <label>Layers:</label>
-        
-
-
+        <div>
             <h3>Main</h3>
             <label for="main_material">Material:</label>
             <select id="main_material" name="main_material"></select><br>
