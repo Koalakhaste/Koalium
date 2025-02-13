@@ -1,8 +1,0 @@
-﻿element,from,to,min,ratio,overcalc
-rptrqty,1,9,2,0,
-rptrqty,10,15,3,0,
-rptrqty,16,30,4,0,
-rptrqty,31,100,6,0,
-rptrqty,101,250,6,0.04,
-rptrqty,251,999,10,0.03,
-rptrqty,1000,100000,30,0.02,

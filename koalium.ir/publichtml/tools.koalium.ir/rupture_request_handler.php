@@ -42,16 +42,36 @@ if ($conn->query($sql_insert) === TRUE) {
     echo "Error: " . $sql_insert . "<br>" . $conn->error;
 }
 
+$sql_search_vs = "
+SELECT *
+FROM validsize
+WHERE size = $size
+";
+
+$result = $conn->query($sql_search);
 // Search for the element with the closest burst pressure
+$bpl = 0.1*$burst_pressure;
+$sql_search = "
+SELECT *
+FROM tested
+WHERE size = $size
+AND type = '$type'
+AND  (ABS(rbp - $burst_pressure) < $bpl OR ABS(bp - $burst_pressure)  < $bpl )
+
+LIMIT 3";
+
+$result = $conn->query($sql_search);
+
+if ($result->num_rows == 0){
 $sql_search = "
 SELECT *
 FROM tested
 WHERE size = $size
 AND type = '$type'
 ORDER BY ABS(rbp - $burst_pressure) ASC
-LIMIT 1";
-
+LIMIT 3";
 $result = $conn->query($sql_search);
+}
 
 if ($result->num_rows > 0) {
     // Output data of the found row
